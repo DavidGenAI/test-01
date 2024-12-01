@@ -1,45 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mobile Video Player</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Style Video Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        /* core styling */
+        *, *:before, *:after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            display: grid;
+            place-items: center;
+            font-size: 16px;
+            background-color: black;
+            color: white;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        /* main styling */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+        }
+        .video-container {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            scroll-snap-align: center;
+            background-color: black;
+        }
+        .video-player video {
+            height: 100%;
+            width: auto;
+            object-fit: cover;
+        }
+        .side-bar {
+            position: absolute;
+            right: 20px;
+            bottom: 50%;
+            transform: translateY(50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .side-icon {
+            font-size: 24px;
+            text-align: center;
+        }
+        .side-icon p {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-  <div class="video-feed">
-    <!-- Video 1 -->
-    <div class="video-wrapper">
-      <video
-        class="video"
-        src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4"
-        autoplay
-        loop
-        muted
-      ></video>
-      <div class="buttons">
-        <div class="icon">❤️ <span>184</span></div>
-        <div class="icon">💬 <span>25</span></div>
-        <div class="icon">🔗 <span>10</span></div>
-      </div>
+    <div class="container">
+        <div class="video-container">
+            <div class="video-player">
+                <video src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" autoplay loop muted></video>
+            </div>
+            <div class="side-bar">
+                <div class="side-icon like-btn">❤️ <p>123</p></div>
+                <div class="side-icon comment-btn">💬 <p>45</p></div>
+                <div class="side-icon share-btn">🔗 <p>12</p></div>
+            </div>
+        </div>
+        <div class="video-container">
+            <div class="video-player">
+                <video src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4" autoplay loop muted></video>
+            </div>
+            <div class="side-bar">
+                <div class="side-icon like-btn">❤️ <p>789</p></div>
+                <div class="side-icon comment-btn">💬 <p>67</p></div>
+                <div class="side-icon share-btn">🔗 <p>20</p></div>
+            </div>
+        </div>
     </div>
-
-    <!-- Video 2 -->
-    <div class="video-wrapper">
-      <video
-        class="video"
-        src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4"
-        autoplay
-        loop
-        muted
-      ></video>
-      <div class="buttons">
-        <div class="icon">❤️ <span>250</span></div>
-        <div class="icon">💬 <span>50</span></div>
-        <div class="icon">🔗 <span>15</span></div>
-      </div>
-    </div>
-  </div>
-  <script src="script.js"></script>
+    <script>
+        // Ensure videos play/pause based on viewport visibility
+        const videoContainers = document.querySelectorAll('.video-container');
+        const handleScroll = () => {
+            videoContainers.forEach(container => {
+                const video = container.querySelector('video');
+                const rect = container.getBoundingClientRect();
+                if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            });
+        };
+        window.addEventListener('scroll', handleScroll);
+    </script>
 </body>
 </html>
