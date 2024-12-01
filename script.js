@@ -1,3 +1,4 @@
+// Ensure videos play/pause based on visibility
 const videoWrappers = document.querySelectorAll('.video-wrapper');
 
 const handleScroll = () => {
@@ -14,4 +15,5 @@ const handleScroll = () => {
   });
 };
 
+// Add scroll event listener
 window.addEventListener('scroll', handleScroll);
