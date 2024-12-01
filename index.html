@@ -7,7 +7,7 @@
     <title>TikTok Style Video Player</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-        /* core styling */
+        /* Core Styling */
         *, *:before, *:after {
             padding: 0;
             margin: 0;
@@ -21,13 +21,15 @@
             font-size: 16px;
             background-color: black;
             color: white;
+            height: 100vh;
+            overflow: hidden;
         }
         a {
             text-decoration: none;
             color: white;
         }
 
-        /* main styling */
+        /* Main Styling */
         .container {
             display: flex;
             flex-direction: column;
@@ -48,7 +50,7 @@
             background-color: black;
         }
         .video-player video {
-            height: 100%;
+            height: calc(100vh - 80px);
             width: auto;
             object-fit: cover;
         }
@@ -64,6 +66,7 @@
         .side-icon {
             font-size: 24px;
             text-align: center;
+            color: white;
         }
         .side-icon p {
             font-size: 14px;
