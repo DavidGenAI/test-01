@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Style Video Player</title>
+    <title>TikTok-Style Video Player</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         /* Core Styling */
@@ -18,15 +17,10 @@
             font-family: Arial, sans-serif;
             display: grid;
             place-items: center;
-            font-size: 16px;
             background-color: black;
             color: white;
             height: 100vh;
             overflow: hidden;
-        }
-        a {
-            text-decoration: none;
-            color: white;
         }
 
         /* Main Styling */
@@ -39,6 +33,7 @@
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
         }
+
         .video-container {
             position: relative;
             height: 100vh;
@@ -49,11 +44,14 @@
             scroll-snap-align: center;
             background-color: black;
         }
+
         .video-player video {
-            height: calc(100vh - 80px);
+            height: 90vh;
             width: auto;
+            max-width: 100%;
             object-fit: cover;
         }
+
         .side-bar {
             position: absolute;
             right: 20px;
@@ -63,14 +61,24 @@
             flex-direction: column;
             gap: 15px;
         }
+
         .side-icon {
             font-size: 24px;
             text-align: center;
             color: white;
         }
+
         .side-icon p {
             font-size: 14px;
             margin-top: 5px;
+        }
+
+        /* Responsive Styling */
+        @media (max-width: 768px) {
+            .video-player video {
+                height: 100vh;
+                width: auto;
+            }
         }
     </style>
 </head>
@@ -81,9 +89,9 @@
                 <video src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" autoplay loop muted></video>
             </div>
             <div class="side-bar">
-                <div class="side-icon like-btn">❤️ <p>123</p></div>
-                <div class="side-icon comment-btn">💬 <p>45</p></div>
-                <div class="side-icon share-btn">🔗 <p>12</p></div>
+                <div class="side-icon like-btn">❤️ <p>234</p></div>
+                <div class="side-icon comment-btn">💬 <p>56</p></div>
+                <div class="side-icon share-btn">🔗 <p>23</p></div>
             </div>
         </div>
         <div class="video-container">
@@ -91,9 +99,9 @@
                 <video src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4" autoplay loop muted></video>
             </div>
             <div class="side-bar">
-                <div class="side-icon like-btn">❤️ <p>789</p></div>
+                <div class="side-icon like-btn">❤️ <p>345</p></div>
                 <div class="side-icon comment-btn">💬 <p>67</p></div>
-                <div class="side-icon share-btn">🔗 <p>20</p></div>
+                <div class="side-icon share-btn">🔗 <p>12</p></div>
             </div>
         </div>
         <div class="video-container">
@@ -104,16 +112,6 @@
                 <div class="side-icon like-btn">❤️ <p>456</p></div>
                 <div class="side-icon comment-btn">💬 <p>89</p></div>
                 <div class="side-icon share-btn">🔗 <p>18</p></div>
-            </div>
-        </div>
-        <div class="video-container">
-            <div class="video-player">
-                <video src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" autoplay loop muted></video>
-            </div>
-            <div class="side-bar">
-                <div class="side-icon like-btn">❤️ <p>234</p></div>
-                <div class="side-icon comment-btn">💬 <p>56</p></div>
-                <div class="side-icon share-btn">🔗 <p>23</p></div>
             </div>
         </div>
     </div>
