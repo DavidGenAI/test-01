@@ -3,103 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video Feed</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #000;
-      color: #fff;
-      overflow: hidden;
-    }
-    .video-feed {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      scroll-snap-type: y mandatory;
-      overflow-y: scroll;
-      height: 100vh;
-    }
-    .video-wrapper {
-      scroll-snap-align: start;
-      height: 100vh;
-      width: 100%;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    video {
-      width: 100%;
-      height: auto;
-      max-height: 100%;
-    }
-    .controls {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .control-btn {
-      background: rgba(0, 0, 0, 0.5);
-      border: none;
-      padding: 10px;
-      border-radius: 50%;
-      color: #fff;
-      font-size: 18px;
-      cursor: pointer;
-    }
-  </style>
+  <title>TikTok-Style Video</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="video-feed">
+    <!-- Video 1 -->
     <div class="video-wrapper">
-      <video src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" autoplay loop muted></video>
-      <div class="controls">
-        <button class="control-btn">❤️</button>
-        <button class="control-btn">💬</button>
-        <button class="control-btn">🔗</button>
+      <video
+        src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4"
+        autoplay
+        loop
+        muted
+        class="video"
+      ></video>
+      <div class="buttons">
+        <div class="icon">
+          ❤️
+          <span>184</span>
+        </div>
+        <div class="icon">
+          💬
+          <span>25</span>
+        </div>
+        <div class="icon">
+          🔗
+          <span>10</span>
+        </div>
       </div>
     </div>
-    <div class="video-wrapper">
-      <video src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4" autoplay loop muted></video>
-      <div class="controls">
-        <button class="control-btn">❤️</button>
-        <button class="control-btn">💬</button>
-        <button class="control-btn">🔗</button>
-      </div>
-    </div>
-    <div class="video-wrapper">
-      <video src="https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4" autoplay loop muted></video>
-      <div class="controls">
-        <button class="control-btn">❤️</button>
-        <button class="control-btn">💬</button>
-        <button class="control-btn">🔗</button>
-      </div>
-    </div>
+    <!-- Add more videos here -->
   </div>
-  <script>
-    // Autoplay videos in view
-    const videoWrappers = document.querySelectorAll('.video-wrapper');
-    const handleScroll = () => {
-      videoWrappers.forEach(wrapper => {
-        const rect = wrapper.getBoundingClientRect();
-        const video = wrapper.querySelector('video');
-        if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
-          video.play();
-        } else {
-          video.pause();
-        }
-      });
-    };
-    window.addEventListener('scroll', handleScroll);
-  </script>
 </body>
 </html>
