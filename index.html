@@ -73,6 +73,27 @@
             margin-top: 5px;
         }
 
+        /* White Dot Button Styling */
+        .white-dot-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: white;
+            color: black;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .white-dot-btn:hover {
+            background-color: lightgray;
+        }
+
         /* Responsive Styling */
         @media (max-width: 768px) {
             .video-player video {
@@ -87,6 +108,8 @@
         <div class="video-container">
             <div class="video-player">
                 <video src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" autoplay loop muted></video>
+                <!-- White Dot Button -->
+                <button class="white-dot-btn" onclick="goToHome()">●</button>
             </div>
             <div class="side-bar">
                 <div class="side-icon like-btn">❤️ <p>234</p></div>
@@ -97,6 +120,8 @@
         <div class="video-container">
             <div class="video-player">
                 <video src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4" autoplay loop muted></video>
+                <!-- White Dot Button -->
+                <button class="white-dot-btn" onclick="goToHome()">●</button>
             </div>
             <div class="side-bar">
                 <div class="side-icon like-btn">❤️ <p>345</p></div>
@@ -107,6 +132,8 @@
         <div class="video-container">
             <div class="video-player">
                 <video src="https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4" autoplay loop muted></video>
+                <!-- White Dot Button -->
+                <button class="white-dot-btn" onclick="goToHome()">●</button>
             </div>
             <div class="side-bar">
                 <div class="side-icon like-btn">❤️ <p>456</p></div>
@@ -130,6 +157,11 @@
             });
         };
         window.addEventListener('scroll', handleScroll);
+
+        // Redirect to homepage when the white dot button is clicked
+        function goToHome() {
+            window.location.href = "homepage.html"; // Replace this with your actual homepage URL
+        }
     </script>
 </body>
 </html>
