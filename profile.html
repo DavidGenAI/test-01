@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>User Profile (Visitor View)</title>
     <style>
         /* Core Styling */
         *, *:before, *:after {
@@ -51,28 +51,18 @@
             font-style: italic;
         }
 
-        .bio-edit {
-            margin: 10px 0;
-            width: 100%;
-            height: 60px;
-            border-radius: 5px;
-            border: none;
-            padding: 10px;
-            font-size: 1em;
-        }
-
-        .save-bio-btn {
+        .interaction-btn {
             background-color: #007BFF;
             color: white;
             border: none;
             border-radius: 5px;
             padding: 10px 20px;
             font-size: 1em;
-            margin: 10px 0;
+            margin: 10px 5px;
             cursor: pointer;
         }
 
-        .save-bio-btn:hover {
+        .interaction-btn:hover {
             background-color: #0056b3;
         }
 
@@ -89,21 +79,6 @@
         .stat-number {
             font-size: 1.2em;
             font-weight: bold;
-        }
-
-        .upload-btn {
-            background-color: #ff2828;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 1em;
-            margin: 20px 0;
-            cursor: pointer;
-        }
-
-        .upload-btn:hover {
-            background-color: #e02222;
         }
 
         .videos-section {
@@ -134,6 +109,62 @@
             text-decoration: underline;
             cursor: pointer;
         }
+
+        /* Chatbox Styling */
+        .chatbox {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            max-width: 90%;
+            background-color: #333;
+            color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chatbox-header {
+            background-color: #444;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .chatbox-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .chatbox-input {
+            display: flex;
+            padding: 10px;
+            background-color: #444;
+        }
+
+        .chatbox-input input {
+            flex: 1;
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .chatbox-input button {
+            margin-left: 5px;
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .chatbox-input button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -142,8 +173,11 @@
             <div class="profile-pic"></div>
             <div class="username">Username</div>
         </div>
-        <textarea class="bio-edit" placeholder="Write a short bio..."></textarea>
-        <button class="save-bio-btn" onclick="saveBio()">Save Bio</button>
+        <div class="bio">This is a brief bio about the user.</div>
+        <div>
+            <button class="interaction-btn" onclick="followUser()">Follow</button>
+            <button class="interaction-btn" onclick="toggleChatbox()">Message</button>
+        </div>
         <div class="stats">
             <div class="stat">
                 <div class="stat-number">120</div>
@@ -154,7 +188,6 @@
                 <div>Following</div>
             </div>
         </div>
-        <button class="upload-btn">Upload Video</button>
         <div class="videos-section">
             <h3>Uploaded Videos</h3>
             <div class="video-grid">
@@ -166,21 +199,46 @@
         </div>
         <div class="back-to-videos" onclick="goToVideos()">Back to Videos</div>
     </div>
+
+    <!-- Chatbox -->
+    <div class="chatbox" id="chatbox">
+        <div class="chatbox-header">Chat</div>
+        <div class="chatbox-messages" id="chatboxMessages"></div>
+        <div class="chatbox-input">
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
     <script>
-        // Save Bio Functionality
-        function saveBio() {
-            const bio = document.querySelector('.bio-edit').value;
-            if (bio.trim() === "") {
-                alert("Please write something in your bio before saving!");
-            } else {
-                alert("Bio saved: " + bio);
-                // Here, you can add functionality to store the bio in a database
-            }
+        // Follow User
+        function followUser() {
+            alert("You have followed this user.");
         }
 
         // Back to Videos
         function goToVideos() {
-            window.location.href = "index.html"; // Replace with the actual video page URL
+            window.location.href = "index.html"; // Replace with actual video page URL
+        }
+
+        // Chatbox Toggle
+        function toggleChatbox() {
+            const chatbox = document.getElementById("chatbox");
+            chatbox.style.display = chatbox.style.display === "none" ? "flex" : "none";
+        }
+
+        // Send Message
+        function sendMessage() {
+            const chatInput = document.getElementById("chatInput");
+            const chatboxMessages = document.getElementById("chatboxMessages");
+
+            if (chatInput.value.trim() !== "") {
+                const newMessage = document.createElement("div");
+                newMessage.textContent = chatInput.value;
+                chatboxMessages.appendChild(newMessage);
+                chatInput.value = "";
+                chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
+            }
         }
     </script>
 </body>
