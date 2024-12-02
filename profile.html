@@ -62,6 +62,10 @@
             cursor: pointer;
         }
 
+        .interaction-btn.unfollow {
+            background-color: #555;
+        }
+
         .interaction-btn:hover {
             background-color: #0056b3;
         }
@@ -175,12 +179,12 @@
         </div>
         <div class="bio">This is a brief bio about the user.</div>
         <div>
-            <button class="interaction-btn" onclick="followUser()">Follow</button>
+            <button class="interaction-btn" id="follow-btn" onclick="toggleFollow()">Follow</button>
             <button class="interaction-btn" onclick="toggleChatbox()">Message</button>
         </div>
         <div class="stats">
             <div class="stat">
-                <div class="stat-number">120</div>
+                <div class="stat-number" id="follower-count">120</div>
                 <div>Followers</div>
             </div>
             <div class="stat">
@@ -211,23 +215,29 @@
     </div>
 
     <script>
-        // Follow User
-        function followUser() {
-            alert("You have followed this user.");
+        let isFollowing = false;
+        let followerCount = 120;
+
+        const followBtn = document.getElementById("follow-btn");
+        const followerCountElement = document.getElementById("follower-count");
+
+        function toggleFollow() {
+            isFollowing = !isFollowing;
+            followerCount += isFollowing ? 1 : -1;
+            followBtn.textContent = isFollowing ? "Unfollow" : "Follow";
+            followBtn.classList.toggle("unfollow", isFollowing);
+            followerCountElement.textContent = followerCount;
         }
 
-        // Back to Videos
         function goToVideos() {
-            window.location.href = "index.html"; // Replace with actual video page URL
+            window.location.href = "index.html";
         }
 
-        // Chatbox Toggle
         function toggleChatbox() {
             const chatbox = document.getElementById("chatbox");
             chatbox.style.display = chatbox.style.display === "none" ? "flex" : "none";
         }
 
-        // Send Message
         function sendMessage() {
             const chatInput = document.getElementById("chatInput");
             const chatboxMessages = document.getElementById("chatboxMessages");
