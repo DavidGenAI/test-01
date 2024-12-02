@@ -15,7 +15,7 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            padding: 10px; /* Add padding to prevent elements from touching screen edges */
+            padding: 10px;
         }
 
         .signup-container {
@@ -53,11 +53,6 @@
             font-size: 14px;
         }
 
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #007bff;
-        }
-
         .signup-btn {
             width: 100%;
             padding: 10px;
@@ -75,8 +70,7 @@
         }
 
         .back-btn {
-            display: block;
-            margin: 20px auto 0;
+            margin-top: 10px;
             padding: 10px 20px;
             background-color: #f5f5f5;
             color: #007bff;
@@ -86,7 +80,6 @@
             font-size: 14px;
             cursor: pointer;
             border: 1px solid #007bff;
-            max-width: 400px; /* Align with form width */
         }
 
         .back-btn:hover {
@@ -151,50 +144,32 @@
     <button class="back-btn" onclick="goBack()">Back to Videos</button>
 
     <script type="module">
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
-        import firebaseApp from "./firebase-init.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
+        import firebaseConfig from "./firebase-config.js";
 
-        const auth = getAuth(firebaseApp);
-        const db = getFirestore(firebaseApp);
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
 
-        // Redirect back to videos
-        function goBack() {
-            window.location.href = "index.html";
-        }
-
-        // Handle form submission
-        document.getElementById("signupForm").addEventListener("submit", async (event) => {
-            event.preventDefault();
-
-            const username = document.getElementById("username").value;
+        document.getElementById("signupForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
-            const age = document.getElementById("age").value;
-            const gender = document.getElementById("gender").value;
-            const country = document.getElementById("country").value;
 
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // Save user profile to Firestore
-                await setDoc(doc(db, "users", user.uid), {
-                    username,
-                    email,
-                    age,
-                    gender,
-                    country,
-                    bio: "",
-                    profilePic: ""
-                });
-
-                alert("Signup successful!");
+                await createUserWithEmailAndPassword(auth, email, password);
+                alert("Signup successful! Redirecting to profile...");
                 window.location.href = "profile.html"; // Redirect to profile page
             } catch (error) {
+                console.error("Error signing up:", error);
                 alert("Error: " + error.message);
             }
         });
+
+        function goBack() {
+            window.location.href = "index.html"; // Redirect back to videos
+        }
     </script>
 </body>
 </html>
