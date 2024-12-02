@@ -15,8 +15,9 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            padding: 10px;
+            padding: 10px; /* Prevent elements from touching screen edges */
         }
+
         .signup-container {
             width: 100%;
             max-width: 400px;
@@ -26,19 +27,23 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             margin-bottom: 20px;
         }
+
         .signup-container h1 {
             font-size: 24px;
             margin-bottom: 20px;
             text-align: center;
         }
+
         .form-group {
             margin-bottom: 15px;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
         }
+
         .form-group input,
         .form-group select {
             width: 100%;
@@ -47,10 +52,12 @@
             border-radius: 5px;
             font-size: 14px;
         }
+
         .form-group input:focus,
         .form-group select:focus {
             border-color: #007bff;
         }
+
         .signup-btn {
             width: 100%;
             padding: 10px;
@@ -62,9 +69,11 @@
             cursor: pointer;
             margin-top: 15px;
         }
+
         .signup-btn:hover {
             background-color: #0056b3;
         }
+
         .back-btn {
             display: block;
             margin: 20px auto 0;
@@ -77,8 +86,9 @@
             font-size: 14px;
             cursor: pointer;
             border: 1px solid #007bff;
-            max-width: 400px;
+            max-width: 400px; /* Align with form width */
         }
+
         .back-btn:hover {
             background-color: #e0e0e0;
         }
@@ -135,50 +145,57 @@
                     <option value="others">Others</option>
                 </select>
             </div>
-            <button type="button" class="signup-btn" onclick="handleSignup()">Sign Up</button>
+            <button type="submit" class="signup-btn">Sign Up</button>
         </form>
     </div>
     <button class="back-btn" onclick="goBack()">Back to Videos</button>
 
-    <script src="firebase-config.js"></script>
-    <script src="firebase-init.js"></script>
-    <script>
-        function goBack() {
-            window.location.href = "index.html"; // Redirect back to videos
-        }
+    <script type="module">
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+        import { app } from "./firebase-config.js";
 
-        async function handleSignup() {
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const age = document.getElementById('age').value;
-            const gender = document.getElementById('gender').value;
-            const country = document.getElementById('country').value;
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const signupForm = document.getElementById("signupForm");
+
+        signupForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const age = document.getElementById("age").value;
+            const gender = document.getElementById("gender").value;
+            const country = document.getElementById("country").value;
 
             try {
-                // Sign up user with Firebase Authentication
-                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-                const userId = userCredential.user.uid;
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
 
-                // Save user data to Firestore
-                await firebase.firestore().collection('users').doc(userId).set({
+                await setDoc(doc(db, "users", user.uid), {
                     username,
                     email,
-                    profilePicture: '', // Default empty value
-                    bio: '', // Default empty bio
-                    followers: [], // Initialize as empty array
-                    following: [], // Initialize as empty array
                     age,
                     gender,
-                    country
+                    country,
+                    bio: "",
+                    followers: [],
+                    following: [],
+                    profilePicture: "default-profile-picture-url",
                 });
 
-                alert('Sign-up successful! Redirecting to your profile...');
-                window.location.href = `profile.html?userId=${userId}`;
+                alert("Signup successful! Redirecting to your profile...");
+                window.location.href = "profile.html"; // Redirect to personal profile page
             } catch (error) {
-                console.error('Error signing up:', error.message);
+                console.error("Error during signup:", error.message);
                 alert(error.message);
             }
+        });
+
+        function goBack() {
+            window.location.href = "index.html"; // Redirect back to videos
         }
     </script>
 </body>
