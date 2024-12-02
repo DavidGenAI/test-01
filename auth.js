@@ -1,35 +1,42 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import firebaseApp from "./firebase-init";
+// auth.js
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+import { app } from "./firebase-config.js";
 
-const auth = getAuth(firebaseApp);
+const auth = getAuth(app);
 
-// Function to handle user signup
-export const signup = async (email, password) => {
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    return userCredential.user;
-  } catch (error) {
-    throw error;
-  }
-};
+export function signupUser(email, password, username, age, gender, country) {
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      console.log("User signed up:", user);
 
-// Function to handle user login
-export const login = async (email, password) => {
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    return userCredential.user;
-  } catch (error) {
-    throw error;
-  }
-};
+      // Save additional user data to Firestore
+      saveUserDetails(user.uid, username, age, gender, country);
+    })
+    .catch((error) => {
+      console.error("Signup Error:", error.message);
+    });
+}
 
-// Function to handle user logout
-export const logout = async () => {
-  try {
-    await signOut(auth);
-  } catch (error) {
-    throw error;
-  }
-};
+function saveUserDetails(uid, username, age, gender, country) {
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+  const db = getFirestore(app);
 
-export default auth;
+  setDoc(doc(db, "users", uid), {
+    username: username,
+    age: age,
+    gender: gender,
+    country: country,
+    followers: [],
+    following: [],
+    bio: "",
+    profilePicture: "default-profile-picture-url",
+  })
+    .then(() => {
+      console.log("User data saved successfully.");
+      window.location.href = "profile.html";
+    })
+    .catch((error) => {
+      console.error("Error saving user data:", error.message);
+    });
+}
