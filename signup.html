@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
-    <script type="module" src="firebase-init.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,7 +17,6 @@
             margin: 0;
             padding: 10px;
         }
-
         .signup-container {
             width: 100%;
             max-width: 400px;
@@ -28,23 +26,19 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             margin-bottom: 20px;
         }
-
         .signup-container h1 {
             font-size: 24px;
             margin-bottom: 20px;
             text-align: center;
         }
-
         .form-group {
             margin-bottom: 15px;
         }
-
         .form-group label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
         }
-
         .form-group input,
         .form-group select {
             width: 100%;
@@ -53,12 +47,10 @@
             border-radius: 5px;
             font-size: 14px;
         }
-
         .form-group input:focus,
         .form-group select:focus {
             border-color: #007bff;
         }
-
         .signup-btn {
             width: 100%;
             padding: 10px;
@@ -70,11 +62,9 @@
             cursor: pointer;
             margin-top: 15px;
         }
-
         .signup-btn:hover {
             background-color: #0056b3;
         }
-
         .back-btn {
             display: block;
             margin: 20px auto 0;
@@ -89,7 +79,6 @@
             border: 1px solid #007bff;
             max-width: 400px;
         }
-
         .back-btn:hover {
             background-color: #e0e0e0;
         }
@@ -98,7 +87,7 @@
 <body>
     <div class="signup-container">
         <h1>Sign Up</h1>
-        <form id="signup-form">
+        <form id="signupForm">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter your username" required>
@@ -146,20 +135,19 @@
                     <option value="others">Others</option>
                 </select>
             </div>
-            <button type="submit" class="signup-btn">Sign Up</button>
+            <button type="button" class="signup-btn" onclick="handleSignup()">Sign Up</button>
         </form>
     </div>
     <button class="back-btn" onclick="goBack()">Back to Videos</button>
 
-    <script type="module">
-        import { auth, db } from './firebase-init.js';
-        import { createUserWithEmailAndPassword } from 'firebase/auth';
-        import { doc, setDoc } from 'firebase/firestore';
+    <script src="firebase-config.js"></script>
+    <script src="firebase-init.js"></script>
+    <script>
+        function goBack() {
+            window.location.href = "index.html"; // Redirect back to videos
+        }
 
-        const signupForm = document.getElementById('signup-form');
-
-        signupForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+        async function handleSignup() {
             const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -168,31 +156,29 @@
             const country = document.getElementById('country').value;
 
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
+                // Sign up user with Firebase Authentication
+                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                const userId = userCredential.user.uid;
 
-                // Add user data to Firestore
-                await setDoc(doc(db, 'users', user.uid), {
+                // Save user data to Firestore
+                await firebase.firestore().collection('users').doc(userId).set({
                     username,
                     email,
+                    profilePicture: '', // Default empty value
+                    bio: '', // Default empty bio
+                    followers: [], // Initialize as empty array
+                    following: [], // Initialize as empty array
                     age,
                     gender,
-                    country,
-                    bio: "", // Empty bio
-                    followers: [], // Empty array for followers
-                    following: [], // Empty array for following
-                    profilePicture: "default_profile_picture_url", // Replace with your default image URL
+                    country
                 });
 
-                // Redirect to personal profile page
-                window.location.href = `profile.html?uid=${user.uid}`;
+                alert('Sign-up successful! Redirecting to your profile...');
+                window.location.href = `profile.html?userId=${userId}`;
             } catch (error) {
-                alert(`Error: ${error.message}`);
+                console.error('Error signing up:', error.message);
+                alert(error.message);
             }
-        });
-
-        function goBack() {
-            window.location.href = 'index.html'; // Redirect back to videos
         }
     </script>
 </body>
