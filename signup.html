@@ -152,8 +152,8 @@
 
     <script type="module">
         import { auth, db } from './firebase-init.js';
-        import { createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js';
-        import { doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js';
+        import { createUserWithEmailAndPassword } from './firebase-auth.js';
+        import { doc, setDoc } from './firebase-firestore.js';
 
         const signupForm = document.getElementById('signupForm');
 
@@ -193,9 +193,9 @@
             }
         });
 
-        function goBack() {
+        window.goBack = function () {
             window.location.href = 'index.html'; // Redirect back to videos
-        }
+        };
     </script>
 </body>
 </html>
