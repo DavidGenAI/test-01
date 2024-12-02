@@ -1,3 +1,6 @@
+// firebase-config.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyB8skdxEjPh8rpE2bI9-h8FALc1oMeKY2M",
   authDomain: "worldshorts-19fbc.firebaseapp.com",
@@ -8,4 +11,5 @@ const firebaseConfig = {
   measurementId: "G-PWVR3QK3DD"
 };
 
-export default firebaseConfig;
+// Initialize Firebase
+export const app = initializeApp(firebaseConfig);
