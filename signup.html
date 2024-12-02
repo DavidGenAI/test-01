@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
+    <script type="module" src="firebase-init.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,7 +16,7 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            padding: 10px; /* Add padding to prevent elements from touching screen edges */
+            padding: 10px;
         }
 
         .signup-container {
@@ -86,7 +87,7 @@
             font-size: 14px;
             cursor: pointer;
             border: 1px solid #007bff;
-            max-width: 400px; /* Align with form width */
+            max-width: 400px;
         }
 
         .back-btn:hover {
@@ -97,7 +98,7 @@
 <body>
     <div class="signup-container">
         <h1>Sign Up</h1>
-        <form id="signupForm">
+        <form id="signup-form">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter your username" required>
@@ -145,46 +146,49 @@
                     <option value="others">Others</option>
                 </select>
             </div>
-            <button type="button" class="signup-btn" onclick="signupUser()">Sign Up</button>
+            <button type="submit" class="signup-btn">Sign Up</button>
         </form>
     </div>
     <button class="back-btn" onclick="goBack()">Back to Videos</button>
 
     <script type="module">
         import { auth, db } from './firebase-init.js';
+        import { createUserWithEmailAndPassword } from 'firebase/auth';
+        import { doc, setDoc } from 'firebase/firestore';
 
-        async function signupUser() {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            const username = document.getElementById("username").value;
-            const age = document.getElementById("age").value;
-            const gender = document.getElementById("gender").value;
-            const country = document.getElementById("country").value;
+        const signupForm = document.getElementById('signup-form');
+
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const age = document.getElementById('age').value;
+            const gender = document.getElementById('gender').value;
+            const country = document.getElementById('country').value;
 
             try {
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const userId = userCredential.user.uid;
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
 
-                // Save user data in Firestore
-                await db.collection("users").doc(userId).set({
-                    username: username,
-                    email: email,
-                    age: age,
-                    gender: gender,
-                    country: country,
-                    bio: ""
+                // Add user data to Firestore
+                await setDoc(doc(db, 'users', user.uid), {
+                    username,
+                    email,
+                    age,
+                    gender,
+                    country,
                 });
 
-                // Redirect to personal profile
-                window.location.href = `profile.html?user=me`;
+                // Redirect to personal profile page
+                window.location.href = `profile.html?uid=${user.uid}`;
             } catch (error) {
-                console.error("Error signing up:", error.message);
-                alert("Signup failed: " + error.message);
+                alert(`Error: ${error.message}`);
             }
-        }
+        });
 
         function goBack() {
-            window.location.href = "index.html"; // Redirect back to videos
+            window.location.href = 'index.html'; // Redirect back to videos
         }
     </script>
 </body>
