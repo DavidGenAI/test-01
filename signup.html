@@ -15,7 +15,7 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            padding: 10px;
+            padding: 10px; /* Add padding to prevent elements from touching screen edges */
         }
 
         .signup-container {
@@ -53,6 +53,11 @@
             font-size: 14px;
         }
 
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #007bff;
+        }
+
         .signup-btn {
             width: 100%;
             padding: 10px;
@@ -70,7 +75,8 @@
         }
 
         .back-btn {
-            margin-top: 10px;
+            display: block;
+            margin: 20px auto 0;
             padding: 10px 20px;
             background-color: #f5f5f5;
             color: #007bff;
@@ -80,6 +86,7 @@
             font-size: 14px;
             cursor: pointer;
             border: 1px solid #007bff;
+            max-width: 400px; /* Align with form width */
         }
 
         .back-btn:hover {
@@ -138,34 +145,43 @@
                     <option value="others">Others</option>
                 </select>
             </div>
-            <button type="submit" class="signup-btn">Sign Up</button>
+            <button type="button" class="signup-btn" onclick="signupUser()">Sign Up</button>
         </form>
     </div>
     <button class="back-btn" onclick="goBack()">Back to Videos</button>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
-        import firebaseConfig from "./firebase-config.js";
+        import { auth, db } from './firebase-init.js';
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth();
-
-        document.getElementById("signupForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
+        async function signupUser() {
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
+            const username = document.getElementById("username").value;
+            const age = document.getElementById("age").value;
+            const gender = document.getElementById("gender").value;
+            const country = document.getElementById("country").value;
 
             try {
-                await createUserWithEmailAndPassword(auth, email, password);
-                alert("Signup successful! Redirecting to profile...");
-                window.location.href = "profile.html"; // Redirect to profile page
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const userId = userCredential.user.uid;
+
+                // Save user data in Firestore
+                await db.collection("users").doc(userId).set({
+                    username: username,
+                    email: email,
+                    age: age,
+                    gender: gender,
+                    country: country,
+                    bio: ""
+                });
+
+                // Redirect to personal profile
+                window.location.href = `profile.html?user=me`;
             } catch (error) {
-                console.error("Error signing up:", error);
-                alert("Error: " + error.message);
+                console.error("Error signing up:", error.message);
+                alert("Signup failed: " + error.message);
             }
-        });
+        }
 
         function goBack() {
             window.location.href = "index.html"; // Redirect back to videos
