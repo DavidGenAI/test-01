@@ -97,7 +97,7 @@
 <body>
     <div class="signup-container">
         <h1>Sign Up</h1>
-        <form>
+        <form id="signupForm">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter your username" required>
@@ -150,10 +150,51 @@
     </div>
     <button class="back-btn" onclick="goBack()">Back to Videos</button>
 
-    <script>
+    <script type="module">
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+        import firebaseApp from "./firebase-init.js";
+
+        const auth = getAuth(firebaseApp);
+        const db = getFirestore(firebaseApp);
+
+        // Redirect back to videos
         function goBack() {
-            window.location.href = "index.html"; // Redirect back to videos
+            window.location.href = "index.html";
         }
+
+        // Handle form submission
+        document.getElementById("signupForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const age = document.getElementById("age").value;
+            const gender = document.getElementById("gender").value;
+            const country = document.getElementById("country").value;
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Save user profile to Firestore
+                await setDoc(doc(db, "users", user.uid), {
+                    username,
+                    email,
+                    age,
+                    gender,
+                    country,
+                    bio: "",
+                    profilePic: ""
+                });
+
+                alert("Signup successful!");
+                window.location.href = "profile.html"; // Redirect to profile page
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        });
     </script>
 </body>
 </html>
