@@ -187,14 +187,18 @@
                 });
 
                 alert('Signup successful!');
-                window.location.href = 'profile.html';
+                window.location.href = 'profile.html'; // Redirect to the personal profile page
             } catch (error) {
-                alert(error.message);
+                if (error.code === 'auth/email-already-in-use') {
+                    alert('Email already in use. Please try another one.');
+                } else {
+                    alert('Error: ' + error.message);
+                }
             }
         });
 
         function goBack() {
-            window.location.href = 'index.html';
+            window.location.href = 'index.html'; // Redirect back to the videos
         }
     </script>
 </body>
