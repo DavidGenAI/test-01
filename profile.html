@@ -61,6 +61,21 @@
             font-size: 1em;
         }
 
+        .save-bio-btn {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 1em;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+
+        .save-bio-btn:hover {
+            background-color: #0056b3;
+        }
+
         .stats {
             display: flex;
             justify-content: space-around;
@@ -128,6 +143,7 @@
             <div class="username">Username</div>
         </div>
         <textarea class="bio-edit" placeholder="Write a short bio..."></textarea>
+        <button class="save-bio-btn" onclick="saveBio()">Save Bio</button>
         <div class="stats">
             <div class="stat">
                 <div class="stat-number">120</div>
@@ -151,6 +167,18 @@
         <div class="back-to-videos" onclick="goToVideos()">Back to Videos</div>
     </div>
     <script>
+        // Save Bio Functionality
+        function saveBio() {
+            const bio = document.querySelector('.bio-edit').value;
+            if (bio.trim() === "") {
+                alert("Please write something in your bio before saving!");
+            } else {
+                alert("Bio saved: " + bio);
+                // Here, you can add functionality to store the bio in a database
+            }
+        }
+
+        // Back to Videos
         function goToVideos() {
             window.location.href = "index.html"; // Replace with the actual video page URL
         }
