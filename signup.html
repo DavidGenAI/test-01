@@ -150,8 +150,10 @@
     </div>
     <button class="back-btn" onclick="goBack()">Back to Videos</button>
 
+    <script src="./firebase-init.js"></script>
     <script>
-        import { auth, db } from './firebase-init.js';
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
         document.getElementById('signupForm').addEventListener('submit', async function(event) {
             event.preventDefault();
