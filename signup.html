@@ -15,7 +15,7 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            padding: 10px; /* Prevent elements from touching screen edges */
+            padding: 10px;
         }
 
         .signup-container {
@@ -86,7 +86,7 @@
             font-size: 14px;
             cursor: pointer;
             border: 1px solid #007bff;
-            max-width: 400px; /* Align with form width */
+            max-width: 400px;
         }
 
         .back-btn:hover {
@@ -150,15 +150,12 @@
     </div>
     <button class="back-btn" onclick="goBack()">Back to Videos</button>
 
-    <script type="module">
+    <script>
         import { auth, db } from './firebase-init.js';
-        import { createUserWithEmailAndPassword } from './firebase-auth.js';
-        import { doc, setDoc } from './firebase-firestore.js';
 
-        const signupForm = document.getElementById('signupForm');
+        document.getElementById('signupForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
 
-        signupForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
             const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -167,35 +164,33 @@
             const country = document.getElementById('country').value;
 
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
+                // Create user in Firebase Authentication
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const userId = userCredential.user.uid;
 
-                await setDoc(doc(db, 'users', user.uid), {
+                // Add user data to Firestore
+                await db.collection('users').doc(userId).set({
                     username,
                     email,
                     age,
                     gender,
                     country,
                     bio: '',
-                    profilePicture: 'default-profile-pic-url',
                     followers: [],
-                    following: []
+                    following: [],
+                    profilePicture: ''
                 });
 
                 alert('Signup successful!');
-                window.location.href = 'profile.html'; // Redirect to personal profile page
+                window.location.href = 'profile.html';
             } catch (error) {
-                if (error.code === 'auth/email-already-in-use') {
-                    alert('Email already in use. Please try another one.');
-                } else {
-                    alert('Error: ' + error.message);
-                }
+                alert(`Signup failed: ${error.message}`);
             }
         });
 
-        window.goBack = function () {
+        function goBack() {
             window.location.href = 'index.html'; // Redirect back to videos
-        };
+        }
     </script>
 </body>
 </html>
